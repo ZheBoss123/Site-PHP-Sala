@@ -73,7 +73,7 @@ unset($ab);
 }
 
 
-    // Arată un abonament
+    
    public static function show() {
     global $pdo;
 
@@ -83,7 +83,7 @@ unset($ab);
         return;
     }
 
-    // Preluăm abonamentul
+    
     $stmt = $pdo->prepare("SELECT * FROM abonamente WHERE abonament_id = :id");
     $stmt->execute([':id' => $abonament_id]);
     $abonament = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -93,7 +93,7 @@ unset($ab);
         return;
     }
 
-    // Preluăm facilitățile pentru abonamentul curent
+    
     $stmt2 = $pdo->prepare("
         SELECT f.facilitate_name 
         FROM privilegiu p
@@ -103,7 +103,7 @@ unset($ab);
     $stmt2->execute([':id' => $abonament['abonament_id']]);
     $abonament['facilitati'] = $stmt2->fetchAll(PDO::FETCH_COLUMN);
 
-    // Verificăm dacă user-ul curent a cumpărat acest abonament
+    
     $current_user_id = $_SESSION["request_user"]["user_id"];
     $stmt3 = $pdo->prepare("
         SELECT purchase_date FROM user_abonamente 
@@ -132,7 +132,7 @@ unset($ab);
 
     $user_id = $_SESSION["request_user"]["user_id"];
 
-    // Verificăm dacă user-ul nu a cumpărat deja
+    
     $stmt_check = $pdo->prepare("
         SELECT 1 FROM user_abonamente 
         WHERE user_id = :user_id AND abonament_id = :abonament_id
@@ -147,7 +147,7 @@ unset($ab);
         exit;
     }
 
-    // Inserăm în tabelul user_abonamente
+   
     $stmt = $pdo->prepare("
         INSERT INTO user_abonamente (user_id, abonament_id, purchase_date) 
         VALUES (:user_id, :abonament_id, CURDATE())
@@ -173,7 +173,7 @@ public static function edit() {
         exit;
     }
 
-    // Verificăm rolul user-ului curent
+    
     $current_user_id = $_SESSION["request_user"]["user_id"];
    $role = UserRole::getRole($_SESSION["request_user"]["role_id"] ?? 0);
 if (!$role || $role['name'] !== 'admin') {
@@ -182,7 +182,7 @@ if (!$role || $role['name'] !== 'admin') {
     exit;
 }
 
-    // Preluăm abonamentul
+    
     $stmt = $pdo->prepare("SELECT * FROM abonamente WHERE abonament_id = :id");
     $stmt->execute([':id' => $abonament_id]);
     $abonament = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -193,7 +193,7 @@ if (!$role || $role['name'] !== 'admin') {
         exit;
     }
 
-    // POST: salvare modificări
+    
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $price = $_POST['total_price'] ?? null;
 
@@ -214,8 +214,9 @@ if (!$role || $role['name'] !== 'admin') {
         exit;
     }
 
-    // Încarcă view-ul edit
+   
     require_once "app/views/abonamente/edit.php";
 }
 
 }
+
