@@ -45,11 +45,11 @@ public static function index() {
     
     $discount_accum = 0;
     foreach ($abonamente as &$ab) {
-        if (empty($ab['user_purchase_date'])) { // doar abonamente ne-cumpărate de user
+        if (empty($ab['user_purchase_date'])) { 
             $ab['display_price'] = max(0, $ab['total_price'] - $discount_accum);
         } else {
             $discount_accum += $ab['total_price'];
-            $ab['display_price'] = 0; // deja cumpărat
+            $ab['display_price'] = 0;
         }
     }
     unset($ab);
@@ -219,4 +219,5 @@ if (!$role || $role['name'] !== 'admin') {
 }
 
 }
+
 
